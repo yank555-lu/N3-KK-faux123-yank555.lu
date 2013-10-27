@@ -86,3 +86,8 @@ GTAGS
 *.orig
 *~
 \#*#
+
+#user excludes
+mkzip.sh
+out/
+
