@@ -90,4 +90,7 @@ GTAGS
 #user excludes
 mkzip.sh
 out/
-
+mkcanzip.sh
+mkeurzip.sh
+mkkttzip.sh
+mksprzip.sh
