@@ -19,6 +19,7 @@
 # Empty directories
 /lost\+found		u:object_r:rootfs:s0
 /proc			u:object_r:rootfs:s0
+/sys			u:object_r:rootfs:s0
 
 # SELinux policy files
 /file_contexts		u:object_r:rootfs:s0
@@ -215,6 +216,10 @@
 # asec containers
 /mnt/asec(/.*)?         u:object_r:asec_apk_file:s0
 /data/app-asec(/.*)?    u:object_r:asec_image_file:s0
+#############################
+## faux kernel hacks
+/sys/devices/system/cpu.*/cpufreq(/.*)? --  u:object_r:sysfs_writable:s0
+
 #line 1 "vendor/samsung/common/sepolicy/file_contexts"
 ############################# 
 # Carrier file
