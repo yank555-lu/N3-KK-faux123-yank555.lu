@@ -12,7 +12,7 @@ RAMFS_TMP="/home/yank555-lu/temp/tmp/ramfs-source-sgn3"
 
 # make defconfig
 # JB : make VARIANT_DEFCONFIG=yank555-lu_msm8974_sec_hlteeur_defconfig faux_msm8974_sec_defconfig
-cp arch/arm/configs/arch/arm/configs/yank555-lu_msm8974_sec_defconfig .config
+cp arch/arm/configs/yank555-lu_msm8974_sec_defconfig .config
 
 . $KERNELDIR/.config
 
