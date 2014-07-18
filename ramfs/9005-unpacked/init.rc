@@ -280,6 +280,9 @@ on post-fs-data
     mkdir /data/property 0700 root root
     mkdir /data/ssh 0750 root shell
     mkdir /data/ssh/empty 0700 root root
+    mkdir /data/system 0775 system system
+    mkdir /data/system/container 0700 system system
+    restorecon -R /data/system
 
     # SA, System SW, SAMSUNG create log directory
     mkdir /data/log 0775 system log
@@ -358,6 +361,7 @@ on post-fs-data
     # MTP permission
     chmod 0660 /dev/usb_mtp_gadget
     chown system mtp /dev/usb_mtp_gadget
+    mkdir /dev/socket/mtp 0770 system mtp
 
     # symlink to bugreport storage location
     symlink /data/data/com.android.shell/files/bugreports /data/bugreports
@@ -368,6 +372,7 @@ on post-fs-data
     mkdir /data/security/booleans 0711 system system
     mkdir /data/security/good 0700 system system
     mkdir /data/security/stig 0700 system system
+    mkdir /data/security/mycontainer 0700 system system
 
     # If there is no fs-post-data action in the init.<device>.rc file, you
     # must uncomment this line, otherwise encrypted filesystems
@@ -645,6 +650,7 @@ on boot
     chown system radio /sys/class/sensors/barometer_sensor/calibration
 # Magnetic_sensor
 #    chown system radio /dev/akm8963
+    chown system radio /sys/class/sensors/magnetic_sensor/selftest
     chown system radio /sys/class/sensors/magnetic_sensor/raw_data
     chown system radio /sys/class/sensors/magnetic_sensor/vendor
     chown system radio /sys/class/sensors/magnetic_sensor/name
@@ -670,6 +676,9 @@ on boot
     chown system radio /sys/class/sensors/ssp_sensor/mcu_test
     chown system radio /sys/class/sensors/ssp_sensor/mcu_reset
     chown system radio /sys/class/sensors/ssp_sensor/mcu_update
+    chown system radio /sys/class/sensors/ssp_sensor/mcu_update2
+    chown system radio /sys/class/sensors/ssp_sensor/mcu_update_ums
+    chown system radio /sys/class/sensors/ssp_sensor/mcu_dump
     chown system radio /sys/class/sensors/ssp_sensor/mcu_sleep_test
     chown system radio /sys/class/sensors/ssp_sensor/ori_poll_delay
     chown system radio /sys/class/sensors/ssp_sensor/mag_poll_delay
@@ -747,6 +756,8 @@ on boot
 	chown system radio /sys/class/power_supply/battery/lte
 	chown system radio /sys/class/power_supply/battery/wc_enable
 	chown system radio /sys/class/power_supply/battery/lcd
+	chown system radio /sys/class/power_supply/ps/status
+	chmod 0664 /sys/class/power_supply/ps/status
 
 # Permission for fast dormancy for RIL
     chown system radio /sys/devices/virtual/sec/bamdmux/waketime
@@ -754,6 +765,9 @@ on boot
 # Permissions for gpio_keys
     chown system radio /sys/class/sec/sec_key/wakeup_keys
     write /sys/class/sec/sec_key/wakeup_keys 116,172
+
+# Permissions for gpio_keys
+    chown system radio /sys/class/sec/sec_key/hall_irq_ctrl
 
 # Define TCP buffer sizes for various networks
 #   ReadMin, ReadInitial, ReadMax, WriteMin, WriteInitial, WriteMax,
@@ -865,6 +879,10 @@ service healthd-charger /sbin/healthd -n
     critical
     seclabel u:r:healthd:s0
 
+# Reload SE Android Policy for MDM
+on property:persist.security.mdm.policy=1
+    setprop selinux.reload_policy 1
+
 on property:selinux.reload_policy=1
     chown system system /sys/fs/selinux/enforce
     chown -R system system /sys/fs/selinux/booleans
@@ -931,6 +949,7 @@ service vold /system/bin/vold
     socket vold stream 0660 root mount
     ioprio be 2
     socket dir_enc_report stream 0660 root mount
+    socket epm stream 0660 system system
 
 service netd /system/bin/netd
     class main
@@ -941,9 +960,6 @@ service netd /system/bin/netd
 service debuggerd /system/bin/debuggerd
     class main
 
-# Tmm Add Start
-    socket rild-cas stream 660  casdrm mmb
-# Tmm Add End
 service DR-daemon /system/bin/ddexe
     class main
     user root
@@ -989,12 +1005,6 @@ service ril-daemon /system/bin/rild
     socket rild stream 660 root radio
     socket rild-debug stream 660 radio system
     socket rild-cas stream 660 casdrm mmb
-#
-# VoWiFi: Added cfiat and kipc socket for Sprint VoWiFi project.
-    socket cfiat stream 660 radio inet
-    socket kipc stream 660 radio inet
-# End of VoWiFi
-#
     user root
     group radio cache inet misc audio log qcom_diag system drmrpc
 
@@ -1003,6 +1013,7 @@ service surfaceflinger /system/bin/surfaceflinger
     user system
     group graphics drmrpc
     onrestart restart zygote
+    onrestart restart gsiff_daemon
 
 service zygote /system/bin/app_process -Xzygote /system/bin --zygote --start-system-server
     class main
@@ -1013,6 +1024,7 @@ service zygote /system/bin/app_process -Xzygote /system/bin --zygote --start-sys
     onrestart restart netd
     onrestart restart sensorhubservice
     onrestart restart bootchecker
+    onrestart restart gsiff_daemon
 
 service drm /system/bin/drmserver
     class main
@@ -1212,4 +1224,3 @@ service sysinit /system/bin/logwrapper /system/xbin/busybox run-parts /system/et
      user root
      group shell
      oneshot
-

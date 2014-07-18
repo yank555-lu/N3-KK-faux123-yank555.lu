@@ -105,3 +105,10 @@ service bootchecker /system/bin/bootchecker
     group system log
     oneshot
 
+# IPSec for VOLTE
+service ipsec-daemon /system/bin/IPSecService
+    class main
+    socket ipsec_socket stream 660 root system
+    user root
+    group system
+
