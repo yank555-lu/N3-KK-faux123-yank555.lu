@@ -7,8 +7,8 @@
  *
  */
 
-#define TSK_ACTIVE_MM 496 /* offsetof(struct task_struct, active_mm)	@ */
-#define TSK_STACK_CANARY 556 /* offsetof(struct task_struct, stack_canary)	@ */
+#define TSK_ACTIVE_MM 256 /* offsetof(struct task_struct, active_mm)	@ */
+#define TSK_STACK_CANARY 316 /* offsetof(struct task_struct, stack_canary)	@ */
 
 #define TI_FLAGS 0 /* offsetof(struct thread_info, flags)	@ */
 #define TI_PREEMPT 4 /* offsetof(struct thread_info, preempt_count)	@ */
