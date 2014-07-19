@@ -61,10 +61,15 @@ storage0
 #
 # Generated include files
 #
-include/config
+include/config/*
 include/linux/version.h
-include/generated
+include/generated/*
 arch/*/include/generated
+include/config/auto.conf
+include/generated/autoconf.h
+include/generated/compile.h
+include/config/kernel.release
+include/generated/utsrelease.h
 
 # stgit generated dirs
 patches-*
