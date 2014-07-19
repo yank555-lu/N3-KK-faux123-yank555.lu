@@ -91,6 +91,7 @@ deps_config := \
 	fs/ext3/Kconfig \
 	fs/ext2/Kconfig \
 	fs/Kconfig \
+	drivers/secfilter/Kconfig \
 	drivers/irda/Kconfig \
 	drivers/extcon/Kconfig \
 	drivers/felica/Kconfig \
@@ -337,6 +338,7 @@ deps_config := \
 	drivers/char/agp/Kconfig \
 	drivers/video/Kconfig \
 	drivers/media/isdbt/Kconfig \
+	drivers/media/isdbtmm/Kconfig \
 	drivers/media/tdmb/Kconfig \
 	drivers/media/dvb/frontends/Kconfig \
 	drivers/media/dvb/ddbridge/Kconfig \
