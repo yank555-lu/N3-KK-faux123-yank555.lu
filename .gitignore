@@ -70,6 +70,11 @@ include/generated/autoconf.h
 include/generated/compile.h
 include/config/kernel.release
 include/generated/utsrelease.h
+auto.conf
+autoconf.h
+compile.h
+kernel.release
+utsrelease.h
 
 # stgit generated dirs
 patches-*
