@@ -859,7 +859,6 @@ char AUTO_UI_2[] = {
 };
 
 ////////////////// GALLERY /////////////////////
-
 static char STANDARD_GALLERY_1[] = {
 	0xEB,
 	0x01, //mdnie_en
